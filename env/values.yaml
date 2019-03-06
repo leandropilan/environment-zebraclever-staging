@@ -1,14 +1,27 @@
-expose:
-  Args: 
-    - --v
-    - 4
-  Annotations:
-    helm.sh/hook: post-install,post-upgrade
-    helm.sh/hook-delete-policy: hook-succeeded
-
+PipelineSecrets:
+  DockerConfig: '{"auths":{"registry.eu-de.bluemix.net":{"auth":"dG9rZW46ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnFkR2tpT2lJek5tSTFOakF4TXkxaFlXSTFMVFV4TmpBdFlXWXdaUzFrWVRjeE5ERTBPV0V6TmpNaUxDSnBjM01pT2lKeVpXZHBjM1J5ZVM1bGRTMWtaUzVpYkhWbGJXbDRMbTVsZENKOS5wMzRqMW5MRXMwV1FjdktLLTVUcE1zLXFRSDV0cDNGUVRtWkNLQUdtZm5j"}}}'
 cleanup:
-  Args: 
-    - --cleanup
   Annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --cleanup
+controllerbuild: {}
+expose:
+  Annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --v
+  - 4
+  config:
+    domain: clariant-cluster.eu-de.containers.appdomain.cloud
+    exposer: Ingress
+    http: "true"
+jenkins:
+  Servers:
+    Global:
+      EnvVars:
+        DOCKER_REGISTRY: registry.eu-de.bluemix.net
+        TILLER_NAMESPACE: kube-system
+prow: {}
